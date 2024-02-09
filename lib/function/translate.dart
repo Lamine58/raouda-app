@@ -13,6 +13,8 @@ translate(name,lang){
       "error_password":"Please enter your password",
       "label_phone":"Phone number",
       "label_password":"Password",
+      "label_location":"Address",
+      "error_location":"Please enter your address",
       "submit_login":"Login",
       "welcome_dash": "Welcome",
       "text_dash": "Member area",
@@ -28,6 +30,8 @@ translate(name,lang){
       "title": 'Finalize payment',
       "description": 'Choose a payment method',
       "amount": 'AMOUNT',
+      "confirm_data":'Done',
+      "wait":'Please wait ...'
     };
 
   }else if(lang=='Français'){
@@ -39,6 +43,8 @@ translate(name,lang){
       "error_password":"Veuillez saisir votre mot de passe",
       "label_phone":"Numéro de téléphone",
       "label_password":"Mot de passe",
+      "label_location":"Adresse",
+      "error_location":"Veuillez saisir votre adresse",
       "submit_login":"Se connecter",
       "welcome_dash": "Bienvenue",
       "text_dash": "Espace membre",
@@ -54,6 +60,8 @@ translate(name,lang){
       "title": 'Finaliser le paiement',
       "description": 'Choisissez une méthode de paiement',
       "amount": 'MONTANT',
+      "confirm_data":'Enregistrer',
+      "wait":"Veuillez patienter ..."
     };
 
   }

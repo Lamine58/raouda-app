@@ -78,3 +78,7 @@ ImageChannel(channel){
     return Image.asset('assets/images/moov.png',height:70);
   }
 }
+
+grayColor() {
+  return Color.fromARGB(255, 196, 196, 196);
+}

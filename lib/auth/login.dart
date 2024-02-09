@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
           children: [
             CircularProgressIndicator(),
             paddingLeft(20),
-            Text('Veuillez patienter ...')
+            Text(translate('wait',lang))
           ],
         ),
       ),

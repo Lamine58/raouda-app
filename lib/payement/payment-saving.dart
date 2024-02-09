@@ -83,7 +83,7 @@ class _PaymentSavingState extends State<PaymentSaving> {
           children: [
             CircularProgressIndicator(),
             paddingLeft(20),
-            Text('Veuillez patienter ...')
+            Text(translate('wait',lang))
           ],
         ),
       ),
