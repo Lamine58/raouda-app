@@ -31,7 +31,9 @@ translate(name,lang){
       "description": 'Choose a payment method',
       "amount": 'AMOUNT',
       "confirm_data":'Done',
-      "wait":'Please wait ...'
+      "wait":'Please wait ...',
+      "open_library":'Open gallery',
+      "open_camera": "Open camera",
     };
 
   }else if(lang=='Français'){
@@ -61,7 +63,9 @@ translate(name,lang){
       "description": 'Choisissez une méthode de paiement',
       "amount": 'MONTANT',
       "confirm_data":'Enregistrer',
-      "wait":"Veuillez patienter ..."
+      "wait":"Veuillez patienter ...",
+      "open_library":'Ouvrir la galerie',
+      "open_camera": "Ouvrir l'appareil photo",
     };
 
   }
