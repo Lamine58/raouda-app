@@ -5,24 +5,23 @@ import 'package:intl/intl.dart';
 import 'package:raouda_collecte/api/api.dart';
 import 'package:raouda_collecte/function/function.dart';
 import 'package:raouda_collecte/function/translate.dart';
-import 'package:raouda_collecte/payement/payment-saving.dart';
-import 'package:raouda_collecte/payement/payment.dart';
+import 'package:raouda_collecte/payement/payment-credit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Saving extends StatefulWidget {
+class Credit extends StatefulWidget {
 
-  var saving;
-  var saving_id;
+  var credit;
+  var credit_id;
   var customer_id;
 
-  Saving(this.saving,this.saving_id,this.customer_id,{Key? key}) : super(key: key);
+  Credit(this.credit,this.credit_id,this.customer_id,{Key? key}) : super(key: key);
 
   @override
-  State<Saving> createState() => _SavingState();
+  State<Credit> createState() => _CreditState();
 }
 
-class _SavingState extends State<Saving> {
+class _CreditState extends State<Credit> {
 
   var load = true;
   int selectedOption = 0;
@@ -69,7 +68,7 @@ class _SavingState extends State<Saving> {
 
         dynamic response;
 
-        response = await api.url(next_page_url+'&customer_id='+widget.customer_id+'&saving_id='+widget.saving_id);
+        response = await api.url(next_page_url+'&customer_id='+widget.customer_id+'&credit_id='+widget.credit_id);
 
         if (response != false) {
           setState(() {
@@ -93,7 +92,7 @@ class _SavingState extends State<Saving> {
   
   data() async {
     
-    var response = await api.get('payments?customer_id='+widget.customer_id+'&saving_id='+widget.saving_id);
+    var response = await api.get('payments?customer_id='+widget.customer_id+'&credit_id='+widget.credit_id);
 
     print(response);
 
@@ -124,7 +123,7 @@ class _SavingState extends State<Saving> {
   void filterItems() {
     String query = searchController.text.toLowerCase();
     setState(() {
-      filteredList = itemList.where((item) =>  item['name'].toString().toLowerCase().contains(query)).toList();
+      filteredList = itemList.where((item) =>  item['title'].toString().toLowerCase().contains(query)).toList();
     });
   }
 
@@ -139,7 +138,7 @@ class _SavingState extends State<Saving> {
         toolbarHeight: 40,
         elevation: 0,
         title: Text(
-          widget.saving['name'],
+          widget.credit['title'],
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w200,
@@ -168,7 +167,7 @@ class _SavingState extends State<Saving> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSaving(widget.saving,widget.customer_id,widget.saving_id),
+                        builder: (context) => PaymentCredit(widget.credit,widget.customer_id,widget.credit_id),
                       ),
                     );
                   },

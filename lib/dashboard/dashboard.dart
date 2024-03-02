@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:raouda_collecte/api/api.dart';
 import 'package:raouda_collecte/auth/login.dart';
 import 'package:raouda_collecte/contribution/contributions.dart';
-import 'package:raouda_collecte/customer/customer.dart';
+import 'package:raouda_collecte/credit/credits.dart';
 import 'package:raouda_collecte/function/function.dart';
 import 'package:raouda_collecte/function/translate.dart';
 import 'package:raouda_collecte/payement/payments.dart';
@@ -274,15 +274,15 @@ class _DashboardState extends State<Dashboard> {
                                     onTap: ()=>{
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Customer())
+                                        MaterialPageRoute(builder: (context) => Credits(id))
                                       )
                                     },
                                     child: Container(
                                       padding: EdgeInsets.all(10),
                                       child: Column(
                                         children: [
-                                          Image.asset('assets/images/6138720.webp',height: 100),
-                                          Text(translate('profil', lang))
+                                          Image.asset('assets/images/2888200.webp',height: 100),
+                                          Text(translate('credit', lang))
                                         ],
                                       ),
                                       decoration: BoxDecoration(

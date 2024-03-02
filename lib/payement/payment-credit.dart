@@ -10,24 +10,22 @@ import 'package:raouda_collecte/function/translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Payment extends StatefulWidget {
+class PaymentCredit extends StatefulWidget {
 
-  final contribution;
+  final credit;
   final customer_id;
-  final contribution_id;
-
-  const Payment(this.contribution,this.customer_id,this.contribution_id,{Key? key}) : super(key: key);
+  final credit_id;
+  const PaymentCredit(this.credit,this.customer_id,this.credit_id,{Key? key}) : super(key: key);
 
   @override
-  State<Payment> createState() => _PaymentState();
+  State<PaymentCredit> createState() => _PaymentCreditState();
 }
 
-class _PaymentState extends State<Payment> {
+class _PaymentCreditState extends State<PaymentCredit> {
 
 
   String lang = 'Français';
   late Api api = Api();
-
   late TextEditingController amountController = TextEditingController();
   
   MaskTextInputFormatter amount = new MaskTextInputFormatter(
@@ -35,6 +33,7 @@ class _PaymentState extends State<Payment> {
     filter: { "#": RegExp(r'[0-9]') },
     type: MaskAutoCompletionType.lazy
   );
+
 
 
   @override
@@ -69,7 +68,7 @@ class _PaymentState extends State<Payment> {
 
   pay(channel) async {
 
-    if((amountController.text.trim()=='' || int.parse(amountController.text)<100) && (widget.contribution['amount']==null)){
+    if(amountController.text.trim()=='' || int.parse(amountController.text)<100){
       _showResultDialog(translate('amount_message', lang));
       return false;
     }
@@ -93,7 +92,7 @@ class _PaymentState extends State<Payment> {
     try {
 
       dynamic response;
-      response = await api.post('payment-contribution',{"customer_id":widget.customer_id,"contribution_id":widget.contribution_id,"channel":channel,"amount": widget.contribution['amount'] ?? amountController.text});
+      response = await api.post('payment-credit',{"customer_id":widget.customer_id,"credit_id":widget.credit_id,"channel":channel,'amount':amountController.text});
       
       if (response['status'] == 'success') {
 
@@ -128,7 +127,7 @@ class _PaymentState extends State<Payment> {
         toolbarHeight: 40,
         elevation: 0,
         title: Text(
-          widget.contribution['name'],
+          widget.credit['title'],
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w200,
@@ -154,8 +153,6 @@ class _PaymentState extends State<Payment> {
                     textAlign: TextAlign.start,
                   ),
                   paddingTop(5),
-                  Text(translate('amount', lang) + " : ${widget.contribution['amount'] ?? 'A défini'} ${widget.contribution['amount']!=null ? 'XOF' : ''} ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.start),
-                  paddingTop(5),
                   Text(
                     translate('description', lang),
                     style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w200),
@@ -178,47 +175,44 @@ class _PaymentState extends State<Payment> {
                    child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        TextFormField(
+                          inputFormatters: [amount],
+                          textInputAction: TextInputAction.next,
+                          controller: amountController,
+                          style: TextStyle(color: Colors.black,fontWeight: FontWeight.w300),
+                          decoration: InputDecoration(
+                            hintText: "Montant",
+                            contentPadding: EdgeInsets.only(left:15,top: 15,bottom: 20,right: 15),
+                            labelStyle: TextStyle(color: Color.fromARGB(255, 120, 120, 120),fontWeight: FontWeight.w300),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 204, 204, 204).withOpacity(0.3),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(134, 255, 255, 255),
+                              )
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(134, 255, 255, 255),
+                              )
+                            ),
+                          ),
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return translate('error_phone', lang);
+                            }
+                            return null;
+                          },
+                        ),
+                        paddingTop(30),
                         Column(
                           children: [
-                            widget.contribution['amount']==null
-                            ? Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
-                              child: TextFormField(
-                                inputFormatters: [amount],
-                                textInputAction: TextInputAction.next,
-                                controller: amountController,
-                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w300),
-                                decoration: InputDecoration(
-                                  hintText: "Montant",
-                                  contentPadding: EdgeInsets.only(left:15,top: 15,bottom: 20,right: 15),
-                                  labelStyle: TextStyle(color: Color.fromARGB(255, 120, 120, 120),fontWeight: FontWeight.w300),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  filled: true,
-                                  fillColor: Color.fromARGB(255, 204, 204, 204).withOpacity(0.3),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(134, 255, 255, 255),
-                                    )
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(134, 255, 255, 255),
-                                    )
-                                  ),
-                                ),
-                                keyboardType: TextInputType.phone,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return translate('error_phone', lang);
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ) : SizedBox(),
                             Row(
                               children: [
                                 Expanded(

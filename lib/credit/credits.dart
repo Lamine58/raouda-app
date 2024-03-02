@@ -1,28 +1,22 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:raouda_collecte/api/api.dart';
+import 'package:raouda_collecte/credit/credit.dart';
 import 'package:raouda_collecte/function/function.dart';
 import 'package:raouda_collecte/function/translate.dart';
-import 'package:raouda_collecte/payement/payment-saving.dart';
-import 'package:raouda_collecte/payement/payment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Saving extends StatefulWidget {
-
-  var saving;
-  var saving_id;
-  var customer_id;
-
-  Saving(this.saving,this.saving_id,this.customer_id,{Key? key}) : super(key: key);
+class Credits extends StatefulWidget {
+  final dynamic id;
+  const Credits(this.id,{Key? key}) : super(key: key);
 
   @override
-  State<Saving> createState() => _SavingState();
+  State<Credits> createState() => _CreditsState();
 }
 
-class _SavingState extends State<Saving> {
+class _CreditsState extends State<Credits> {
 
   var load = true;
   int selectedOption = 0;
@@ -37,9 +31,6 @@ class _SavingState extends State<Saving> {
   bool _isLoading = false;
 
   String lang = 'Français';
-  String amount = '';
-  String total = '';
-  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'fr_XOF', symbol: 'XOF');
 
   void _scrollListener() {
     if (_scrollController.position.pixels ==
@@ -69,14 +60,12 @@ class _SavingState extends State<Saving> {
 
         dynamic response;
 
-        response = await api.url(next_page_url+'&customer_id='+widget.customer_id+'&saving_id='+widget.saving_id);
+        response = await api.url(next_page_url+'&id='+widget.id);
 
         if (response != false) {
           setState(() {
             var data = response['data']['data'];
             next_page_url = response['data']['next_page_url'];
-            total = response['total'].toString();
-            amount = currencyFormatter.format(response['amount']);
             _isLoading = false;
             data.forEach((acte) {
               itemList.add(acte);
@@ -90,20 +79,16 @@ class _SavingState extends State<Saving> {
       }
     }
   }
-  
+
   data() async {
     
-    var response = await api.get('payments?customer_id='+widget.customer_id+'&saving_id='+widget.saving_id);
-
-    print(response);
+    var response = await api.get('credits?id='+widget.id);
 
     try{
       if (response['status'] == 'success') {
         setState(() {
           itemList = response['data']['data'];
           next_page_url = response['data']['next_page_url'];
-          total = response['total'].toString();
-          amount = currencyFormatter.format(response['amount']);
           filteredList = itemList;
           load = false;
         });
@@ -124,7 +109,7 @@ class _SavingState extends State<Saving> {
   void filterItems() {
     String query = searchController.text.toLowerCase();
     setState(() {
-      filteredList = itemList.where((item) =>  item['name'].toString().toLowerCase().contains(query)).toList();
+      filteredList = itemList.where((item) =>  item['title'].toString().toLowerCase().contains(query)).toList();
     });
   }
 
@@ -139,7 +124,7 @@ class _SavingState extends State<Saving> {
         toolbarHeight: 40,
         elevation: 0,
         title: Text(
-          widget.saving['name'],
+          translate('credit', lang),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w200,
@@ -147,54 +132,10 @@ class _SavingState extends State<Saving> {
           )
         ),
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.only(top:0,bottom: 20,left: 10,right: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                width: double.infinity, 
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor(),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentSaving(widget.saving,widget.customer_id,widget.saving_id),
-                      ),
-                    );
-                  },
-                  child: Text(translate('pay_contribution',lang),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.center)
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
       backgroundColor: primaryColor(),
       body: 
         Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(translate('amount_payment', lang) + " : $total",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.start),
-                paddingTop(5),
-                Text(translate('total_payment', lang) + " : $amount",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300),textAlign: TextAlign.start),
-              ],
-            ),
-          ),
           Container(
             padding: EdgeInsets.only(left: 15,right: 15,top: 10),
             decoration: BoxDecoration(
@@ -292,6 +233,10 @@ class _SavingState extends State<Saving> {
                           width: double.infinity,
                           child: GestureDetector(
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Credit(item,item['id'],item['customer_id']))
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -308,15 +253,16 @@ class _SavingState extends State<Saving> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(item['reference_operateur'],textAlign:TextAlign.start,style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Roboto',fontSize: 15)),
+                                          Text(item['title'],textAlign:TextAlign.start,style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Roboto',fontSize: 15)),
                                           paddingTop(3),
-                                          Text(currencyFormatter.format(int.parse(item['amount'])),textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto')),
+                                          Text(item['description'],textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto')),
+                                          Text(translate('amount', lang)+" : ${item['amount']} XOF",textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto')),
                                           Text(dateLang(item['created_at'],lang),textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto',fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  ImageChannel(item['channel'])
+                                  Icon(Icons.chevron_right,color: primaryColor())
                                 ],
                               ),
                             ),

@@ -68,8 +68,8 @@ class _PaymentSavingState extends State<PaymentSaving> {
 
   pay(channel) async {
 
-    if(amountController.text.trim()=='' && int.parse(amountController.text)<100){
-      _showResultDialog('Veuillez saisir le montant');
+    if(amountController.text.trim()=='' || int.parse(amountController.text)<100){
+      _showResultDialog(translate('amount_message', lang));
       return false;
     }
       

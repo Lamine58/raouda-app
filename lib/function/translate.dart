@@ -34,6 +34,8 @@ translate(name,lang){
       "wait":'Please wait ...',
       "open_library":'Open gallery',
       "open_camera": "Open camera",
+      "credit":'Credits',
+      "amount_message":"Please enter the amount greater than 100 XOF"
     };
 
   }else if(lang=='Français'){
@@ -66,6 +68,8 @@ translate(name,lang){
       "wait":"Veuillez patienter ...",
       "open_library":'Ouvrir la galerie',
       "open_camera": "Ouvrir l'appareil photo",
+      "credit":'Recouvrements',
+      "amount_message":"Veuillez saisir le montant supérieur à 100 XOF"
     };
 
   }

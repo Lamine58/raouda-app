@@ -255,7 +255,7 @@ class _ContributionsState extends State<Contributions> {
                                         children: [
                                           Text(item['name'],textAlign:TextAlign.start,style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Roboto',fontSize: 15)),
                                           paddingTop(3),
-                                          Text(item['amount'],textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto')),
+                                          Text(item['amount'] ?? 'Non définie',textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto')),
                                           Text(dateLang(item['created_at'],lang),textAlign:TextAlign.start,style: TextStyle(fontFamily: 'Roboto',fontSize: 12)),
                                         ],
                                       ),
